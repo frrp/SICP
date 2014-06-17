@@ -1,4 +1,4 @@
-;; chapter 1 excercises of SICP book
+;; chapter 1 exercises of SICP book
 
 (defn r [] (require :reload 'chap1))
 
