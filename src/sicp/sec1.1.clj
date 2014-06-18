@@ -1,4 +1,5 @@
 ;; Section 1.1 exercises of SICP book, 2nd ed
+;; 1.1  The Elements of Programming
 
 (ns sicp.sec1.1)
 
