@@ -119,7 +119,3 @@
   (/ (+ (/ x (square guess))
         (* 2 guess))
      3))
-
-
-;; Exercise 1.9
-
