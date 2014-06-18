@@ -255,9 +255,28 @@
 ;; 1.2.3  Orders of Growth
 
 ;; Exercise 1.14
+;; space is O(n), time is O(poly)
+
+;; Exercise 1.15
+
+(defn cube [x]
+  (* x x x))
+
+(defn p [x]
+  (-  (* 3 x)
+      (* 4 (cube x))))
+
+(defn sine [angle]
+  (if (not (> (abs angle) 0.1))
+    angle
+    (p (sine (/ angle 3.0)))))
+
+(sine 12.15)
 
 
 ;; 1.2.4  Exponentiation
+
+;; Exercise 1.16
 
 ;; 1.2.5  Greatest Common Divisors
 
