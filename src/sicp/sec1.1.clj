@@ -71,14 +71,19 @@
           (> iters 10000) guess
           :else (recur (improve guess x) (inc iters)) )))
 
-(defn sqrt [x]
-  (letfn
-   [(my-good-enough? [guess]  (< (abs (- (square guess) x)) 0.001))
-    (my-improve [guess]       (my-average guess (/ x guess)))
-    (my-average [x y]         (/ (+ x y) 2.0))]
-   (loop [guess 1 iters 0]
-     (cond (my-good-enough? guess) guess
-           (> iters 10000) guess
-           :else (recur (my-improve guess) (inc iters)) ))))
+;; Exercise 1.6
+;; applicative-order evaluation in new-if causes an infinite loop when used in sqrt-iter
 
+(defn new-if [predicate then-clause else-clause]
+  (cond (predicate then-clause)
+        (else-clause)))
+
+;;(println-str "new-if")
+;;(new-if (= 2 3) 1 0)
+;;Java Exception: java.lang.Boolean cannot be cast to clojure.lang.IFn
+
+;;(println-str "if")
+;;(if (= 2 3) 1 0)
+
+;; Exercise 1.7
 
