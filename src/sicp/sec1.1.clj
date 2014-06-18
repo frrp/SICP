@@ -85,5 +85,41 @@
 ;;(println-str "if")
 ;;(if (= 2 3) 1 0)
 
-;; Exercise 1.7
+
+;; Exercise 1.7 - improving sqrt for small and large numbers
+
+(defn new-good-enough? [guess x]
+  (< (abs (- (square guess) x)) 0.001))
+
+(defn new-improve [guess x]
+  (average guess (/ x guess)))
+
+(defn new-sqrt-iter [guess x]
+    (loop [guess 1 iters 0]
+     (cond (new-good-enough? guess x) guess
+           (> iters 10000) guess
+           :else (recur (new-improve guess x) (inc iters)) )))
+
+(defn sqrt [x]
+  (new-sqrt-iter 1.0 x))
+
+;; original functions are failing
+(sqrt1 0.00000000005)
+;;(sqrt1 99990000000000000000000)
+;; with stack overflow....
+
+;; but the new one works (almost)
+(sqrt 0.000000025) ;; this does not work yet !!
+(sqrt 99990000000000000000000)
+
+;; Exercise 1.8
+;; much slower but more precise
+
+(defn better-improve [guess x]
+  (/ (+ (/ x (square guess))
+        (* 2 guess))
+     3))
+
+
+;; Exercise 1.9
 
