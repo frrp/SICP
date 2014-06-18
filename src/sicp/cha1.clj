@@ -198,19 +198,37 @@
         (:else (A (- x 1)
                  (A x (- y 1))))))
 
-
 ;; 1.2.2  Tree Recursion
+
+(defn fib-iter [a b count]
+  (if (zero? 0)
+    b
+    (fib-iter (+ a b) a (- count 1))))
+
+(defn fib [n]
+  (fib-iter 1 0 n))
+
+(fib 3)
+
+;; counting change
+(defn count-change [amount coin-values]
+  (cond (= amount 0) 1
+        (or (< amount 0) (empty? coin-values)) 0
+        :else (+ (count-change amount (rest coin-values)) (count-change (- amount (first coin-values)) coin-values))
+        ))
+
+(count-change 5 [1 2])
 
 ;; Exercise 1.11
 
-;; recursive
+;; recursive function F
 (defn F [n]
     (cond (< n 3) n
           :else (+ (F (- n 1))
                     (* 2 (F (- n 2)))
                     (* 3 (F (- n 3))))))
 
-;; iterative processes to compute F:
+;; iterative processes to compute F
 (defn F-iter [n]
   (loop [acc 2 b 1 c 0 count n]
     (if (= count 2)
@@ -219,7 +237,25 @@
 
 (= 59 (F-iter 6) (F 6))
 
+;; Exercise 1.12
+;; binomial coefficients, iterative version
+
+(defn bc [row col]
+  (loop [r row c col acc 1]
+    (if (or (= c 0) (= r 0) (= r c))
+      acc
+      (recur (dec r) (dec c) (/ (* acc r) c)))))
+
+(bc 5 3)
+
+;; Exercise 1.13
+;; Prove that (= fib(n) (closest_integer (/ (exp GR n) (sqrt 5)))) ,
+;; where GR is the golden ratio
+
 ;; 1.2.3  Orders of Growth
+
+;; Exercise 1.14
+
 
 ;; 1.2.4  Exponentiation
 
