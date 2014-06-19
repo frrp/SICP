@@ -246,7 +246,8 @@
       acc
       (recur (dec r) (dec c) (/ (* acc r) c)))))
 
-(bc 5 3)
+(bc 6 2)
+(bc 5 2)
 
 ;; Exercise 1.13
 ;; Prove that (= fib(n) (closest_integer (/ (exp GR n) (sqrt 5)))) ,
@@ -273,15 +274,95 @@
 
 (sine 12.15)
 
+;; p is applied 5 times for computing (sine 12.15)
+;; runtime of sine function is O(log_3 (n))
+;; space is O(log n) - linear recursion
+
 
 ;; 1.2.4  Exponentiation
 
+; Recursive version
+(defn fast-expt [b n]
+  (cond (zero? n) 1
+        (even? n) (square (fast-expt b (/ n 2)))
+        :else (* b (fast-expt b (- n 1)))))
+
+(fast-expt 2 30)
+
 ;; Exercise 1.16
+;; iterative exponentiation process for expt
+(defn fast-expt-iter [b n]
+  (loop [bb b cnt n acc 1]
+    (cond (zero? cnt) acc
+          (even? cnt) (recur (square bb) (/ cnt 2) acc)
+          :else (recur bb (dec cnt) (* bb acc)))
+      ))
+
+(fast-expt-iter 2 7)
+
+;; recursive multiplication
+(defn mult [a b]
+  (if (= b 1) a
+      (+ a (mult a (dec b))) ))
+
+;; Exercise 1.17
+
+(defn double [x]
+  (* x 2))
+
+(defn halve [x]
+  (/ x 2))
+
+(defn fast-mult [a b]
+  (cond (zero? b) 0
+        (= b 1) a
+        (even? b) (double (fast-mult a (halve b)))
+        :else (+ a (fast-mult a (dec b)))))
+
+(fast-mult 4 6)
+
+;; Exercise 1.18
+
+(defn fast-mult-iter [i j]
+   (loop [a i b j acc 0]
+     (cond (zero? b) acc
+         (even? b) (recur (double a) (halve b) acc)
+         :else (recur a (dec b) (+ acc a)) )))
+
+(fast-mult-iter 5 4)
+
+;; Exercise 1.19
+
+(defn ffib-iter-a [a b p q count]
+  (cond (zero? count) b
+        (even? count)
+          (ffib-iter-a a
+                       b
+                       (+ (* p p) (* q q))     ; p'
+                       (+ (* 2 p q) (* q q))   ; q'
+                       (/ count 2))
+        :else (ffib-iter-a (+ (* b q) (* a q) (* a p))
+                              (+ (* b p) (* a q))
+                              p
+                              q
+                              (dec count)))
+  )
+
+(defn ffib-iter [n]
+  (ffib-iter-a 1 0 0 1 n))
+
+(= 55 (ffib-iter 10))
+
 
 ;; 1.2.5  Greatest Common Divisors
+
 
 ;; 1.2.6  Example: Testing for Primality
 
 
 ;; 1.3  Formulating Abstractions with Higher-Order Procedures
+
+
+
+
 
