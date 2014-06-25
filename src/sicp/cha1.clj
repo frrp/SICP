@@ -199,6 +199,7 @@
                  (A x (- y 1))))))
 
 ;; 1.2.2  Tree Recursion
+(comment
 
 (defn fib-iter [a b count]
   (if (zero? 0)
@@ -209,6 +210,7 @@
   (fib-iter 1 0 n))
 
 (fib 3)
+)
 
 ;; counting change
 (defn count-change [amount coin-values]
@@ -368,40 +370,49 @@
 
 ;; 1.2.6  Example: Testing for Primality
 
-(defn smallest-divisor [n]
-  (find-divisor n 2))
-
 (defn find-divisor [n test-divisor]
   (cond (> (square test-divisor) n) n
         (divides? test-divisor n) test-divisor
         :else (find-divisor n (+ test-divisor 1))))
 
-(defn divides? [a b]
-  (= (rem b a) 0))
+(defn smallest-divisor [n]
+  (find-divisor n 2))
 
 (defn prime? [n]
   (= n (smallest-divisor n)))
 
+
+(defn divides? [a b]
+  (= (rem b a) 0))
+
+; Fermat's test
 (defn expmod [base exponent m]
   (cond (= exponent 0) 1
-        (even? exponent (rem  (square (expmod base (/ exponent 2) m))
-                m))
+        (even? exponent) (rem (square (expmod base (/ exponent 2) m))
+                m)
         :else (rem  (* base (expmod base (- exponent 1) m))
                 m)))
 
 (defn fermat-test [n]
   (defn try-it [a]
     (= (expmod a n n) a))
-  (try-it (+ 1 (random (- n 1)))))
+  (try-it (+ 1 (rand (- n 1)))))
 
 (defn fast-prime? [n times]
   (cond (= times 0) true
         (fermat-test n) (fast-prime? n (- times 1))
         :else false))
 
-
 ;; Exercise 1.21
 
+(smallest-divisor 199)
+
+(smallest-divisor 1999)
+
+(= 7 (smallest-divisor 19999))
+
+
+;; Exercise 1.22
 
 ;; 1.3  Formulating Abstractions with Higher-Order Procedures
 
