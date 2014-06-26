@@ -1,4 +1,4 @@
-;; Code and exercises from SICP book, 2nd ed
+;; Code and exercises from the SICP book, 2nd ed
 
 
 ;; Chapter 1
@@ -6,6 +6,12 @@
 
 (ns sicp.cha1)
 
+;; macro for benchmarking from the book Programming Clojure
+(defmacro bench [expr]
+  `(let [start# (System/nanoTime)
+	 result# ~expr]
+     {:result result#
+      :elapsed (- (System/nanoTime) start#)}))
 
 ;; 1.1  The Elements of Programming
 
@@ -378,10 +384,6 @@
 (defn smallest-divisor [n]
   (find-divisor n 2))
 
-(defn prime? [n]
-  (= n (smallest-divisor n)))
-
-
 (defn divides? [a b]
   (= (rem b a) 0))
 
@@ -413,10 +415,35 @@
 
 
 ;; Exercise 1.22
+;; is the order of growth of testing for primes really Θ(√n) ?
+
+;; timed prime
+;; returns {:elapsed x, :result y, :num z}
+(defn prime? [n]
+  (conj {:num n}
+  (bench (= n (smallest-divisor n)))))
+
+(prime? 1999)
+
+;; prime numbers generator
+(defn prime-seq [n]
+  (map #(list (:num %) (:elapsed %))
+       (filter #(true? (:result %))
+	       (map #(prime? (+ % n)) (iterate inc 2)))))
+
+;; finds the first 3 primes larger than n
+(defn search-for-primes [n]
+  (let [x (if (even? n) (inc n) n)]
+    (map #(nth (prime-seq x) %) [0 1 2])))
+
+(search-for-primes 1000)
+(search-for-primes 10000)
+(search-for-primes 100000)
+(search-for-primes 1000000)
+
+;; Exercise 1.23
+
 
 ;; 1.3  Formulating Abstractions with Higher-Order Procedures
-
-
-
 
 
