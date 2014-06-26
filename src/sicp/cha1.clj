@@ -7,6 +7,7 @@
 (ns sicp.cha1)
 
 ;; macro for benchmarking from the book Programming Clojure
+;; get back elapsed time in nanoseconds
 (defmacro bench [expr]
   `(let [start# (System/nanoTime)
 	 result# ~expr]
@@ -205,18 +206,18 @@
                  (A x (- y 1))))))
 
 ;; 1.2.2  Tree Recursion
-(comment
 
-(defn fib-iter [a b count]
-  (if (zero? 0)
+
+(defn fib-iter [a b count]
+  (if (zero? 0)
     b
-    (fib-iter (+ a b) a (- count 1))))
+    (fib-iter (+ a b) a (- count 1))))
 
-(defn fib [n]
-  (fib-iter 1 0 n))
+(defn fib [n]
+  (fib-iter 1 0 n))
 
 (fib 3)
-)
+
 
 ;; counting change
 (defn count-change [amount coin-values]
@@ -289,7 +290,7 @@
 
 ;; 1.2.4  Exponentiation
 
-; Recursive version
+;; Recursive version
 (defn fast-expt [b n]
   (cond (zero? n) 1
         (even? n) (square (fast-expt b (/ n 2)))
@@ -387,7 +388,7 @@
 (defn divides? [a b]
   (= (rem b a) 0))
 
-; Fermat's test
+
 (defn expmod [base exponent m]
   (cond (= exponent 0) 1
         (even? exponent) (rem (square (expmod base (/ exponent 2) m))
@@ -405,6 +406,8 @@
         (fermat-test n) (fast-prime? n (- times 1))
         :else false))
 
+(fast-prime? 19999 10)
+
 ;; Exercise 1.21
 
 (smallest-divisor 199)
@@ -416,6 +419,7 @@
 
 ;; Exercise 1.22
 ;; is the order of growth of testing for primes really Θ(√n) ?
+;; yes, roughly
 
 ;; timed prime
 ;; returns {:elapsed x, :result y, :num z}
@@ -440,8 +444,69 @@
 (search-for-primes 10000)
 (search-for-primes 100000)
 (search-for-primes 1000000)
+(search-for-primes 10000000)
 
 ;; Exercise 1.23
+;; taking only the odd half of the divisors does speed up
+;; the primarility test roughly by a factor of two
+
+(defn next1 [n]
+  ( if (= n 2) 3 (+ n 2)))
+
+(defn find-divisor1 [n test-divisor]
+  (cond (> (square test-divisor) n) n
+        (divides? test-divisor n) test-divisor
+        :else (find-divisor1 n (next1 test-divisor))))
+
+(defn smallest-divisor1 [n]
+  (find-divisor1 n 2))
+
+(defn prime?1 [n]
+  (conj {:num n}
+  (bench (= n (smallest-divisor1 n)))))
+
+(defn prime-seq1 [n]
+  (map #(list (:num %) (:elapsed %))
+       (filter #(true? (:result %))
+	       (map #(prime?1 (+ % n)) (iterate inc 2)))))
+
+(defn search-for-primes1 [n]
+  (let [x (if (even? n) (inc n) n)]
+    (map #(nth (prime-seq1 x) %) [0 1 2])))
+
+(search-for-primes1 1000)
+(search-for-primes1 10000)
+(search-for-primes1 100000)
+(search-for-primes1 1000000)
+(search-for-primes1 10000000)
+
+;; Exercise 1.24
+;; replacing the primarility test with Fermat's test of growth Θ(log(n))
+;; so far it takes longer, but the complexity should grow a bit slower...
+
+;; using fermat-test, repeating 3 times
+(defn prime?-f [n]
+  (conj {:num n}
+ 	(bench (fast-prime? n 3))))
+
+;(prime?-f 1999)
+
+(defn prime-seq-f [n]
+  (map #(list (:num %) (:elapsed %))
+       (filter #(true? (:result %))
+	       (map #(prime?-f (+ % n)) (iterate inc 2)))))
+
+(defn search-for-primes-f [n]
+  (let [x (if (even? n) (inc n) n)]
+    (map #(nth (prime-seq-f x) %) [0 1 2])))
+
+(search-for-primes-f 1000)
+(search-for-primes-f 10000)
+;(search-for-primes-f 100000)
+;(search-for-primes-f 1000000)
+;(search-for-primes-f 10000000)
+
+;; Exercise 1.25
 
 
 ;; 1.3  Formulating Abstractions with Higher-Order Procedures
