@@ -1,6 +1,6 @@
 # SICP
 
-Solving Structure and Interpretation of Computer Programs (SICP) exercises with Clojure first.
+Solving Structure and Interpretation of Computer Programs (SICP) exercises with Clojure and Scheme.
 
 ## The plan is to:
 
