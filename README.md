@@ -1,10 +1,9 @@
 # SICP
 
-Solving Structure and Interpretation of Computer Programs (SICP) exercises with Clojure.
+Solving Structure and Interpretation of Computer Programs (SICP) exercises with Clojure first.
 
 ## The plan is to:
 
+* Do all of the interesting exercises in the book using Clojure (and for later chapters in MIT Scheme)
 * Read the book
-* See all the video lectures by Sussman and Abelson
-* Do most of the interesting exercises in the book using Clojure (or MIT Scheme if necessary)
-
+* See the video lectures by Sussman and Abelson
